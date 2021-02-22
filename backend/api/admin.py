@@ -1,3 +1,5 @@
 from django.contrib import admin
+from api.models import RiskTypeDefinition, RiskTypeData
 
-# Register your models here.
+admin.site.register(RiskTypeData)
+admin.site.register(RiskTypeDefinition)
