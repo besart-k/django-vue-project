@@ -1,12 +1,16 @@
 from rest_framework import viewsets, status
 
-from api.serializers import RiskTypeDefinitionSerializer, RiskTypeDataSerializer
+from api.serializers import RiskTypeDataSerializer, RiskTypeDefinitionListSerializer, RiskTypeDefinitionDetailSerializer
 from api.models import RiskTypeDefinition, RiskTypeData
 
 
 class RiskTypeDefinitionViewSet(viewsets.ModelViewSet):
     queryset = RiskTypeDefinition.objects.all()
-    serializer_class = RiskTypeDefinitionSerializer
+    serializer_class = RiskTypeDefinitionListSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = RiskTypeDefinitionDetailSerializer
+        return super(RiskTypeDefinitionViewSet, self).retrieve(request, *args, **kwargs)
 
     def destroy(self, request, pk=None):
         response = {'message': 'Delete function is not offered in this path.'}

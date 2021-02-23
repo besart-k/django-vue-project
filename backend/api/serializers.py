@@ -3,10 +3,15 @@ from rest_framework import serializers
 from api.models import RiskTypeData, RiskTypeDefinition
 
 
-class RiskTypeDefinitionSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDefinitionListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RiskTypeDefinition
-        fields = ('name', 'definition')
+        fields = ('id', 'name')
+
+class RiskTypeDefinitionDetailSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = RiskTypeDefinition
+        fields = ('id', 'name', 'definition')
 
 
 class RiskTypeDataSerializer(serializers.HyperlinkedModelSerializer):
