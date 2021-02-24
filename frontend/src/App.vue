@@ -1,55 +1,31 @@
 <template>
   <div id="app">
-    <header>
-      <h1>List of Risk Types</h1>
-    </header>
-    <main>
-      <aside class="sidebar">
-        <div v-for="type in riskTypes" v-bind:key="type.id">
-          {{ type.name }}
-        </div>
-      </aside>
-      <div class="content">
-      </div>
-    </main>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/risk-types">Risk Types</router-link> |
+      <router-link to="/risk-type-add">Generate Risk Type</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
 
-<script>
-  import axios from 'axios'
-
-  export default {
-    name: 'App',
-    data() {
-      return {
-        riskTypes: [],
-        endpoint: 'http://localhost:8000/risk-type-definitions/'
-      }
-    },
-    created() {
-      this.getAllRiskTypes();
-    },
-
-    methods: {
-      getAllRiskTypes() {
-        axios.get(this.endpoint).then(response => {
-          this.riskTypes = response.data;
-        }).catch(error => {
-          console.log('-----error-------');
-          console.log(error);
-        })
-      }
-    }
-  }
-</script>
-
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+#nav {
+  padding: 30px;
+}
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
 </style>
