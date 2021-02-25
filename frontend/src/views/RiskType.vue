@@ -1,11 +1,9 @@
 <template>
     <div>
         <h1>Risk Type Name : {{riskTypeName}}</h1>
-        <div v-if="Object.keys(schema).length">
-            <FormSchema :schema="schema" v-model="model">
+            <FormSchema :schema="schema" v-model="model" ref="formSchema">
                 <button type="submit">Subscribe</button>
             </FormSchema>
-        </div>
         
 
     </div>
@@ -22,7 +20,7 @@
             schema: {},
             model: {},
             riskTypeName : '',
-            endpoint: 'http://localhost:8000/risk-type-definitions/'
+            endpoint: 'http://localhost:8000/risk-type-definitions/',
         }),
         created() {
             var riskTypeId = this.$route.params.id;
@@ -33,7 +31,7 @@
             setRiskType(id) {
                 axios.get(`${this.endpoint}${id}`).then(response => {
                     const {name, definition} = response.data;
-                    this.schema = definition;
+                    this.$refs.formSchema.load(definition)
                     this.riskTypeName = name;
                 }).catch(error => {
                     console.log(error);
@@ -44,4 +42,7 @@
             FormSchema
         }
     }
+
+    
+    
 </script>
