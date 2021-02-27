@@ -66,3 +66,18 @@ invalid_schema = {
                 }
             }
 }
+
+name_age_form_data = {
+    "age": 18,
+    "name": "Name"
+}
+
+name_age_form_data_2 = {
+    "age": 24,
+    "name": "Name"
+}
+
+name_age_invalid_form_data = {
+    "age": 16,
+    "name": "Name"
+}

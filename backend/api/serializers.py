@@ -3,19 +3,19 @@ from rest_framework import serializers
 from api.models import RiskTypeData, RiskTypeDefinition
 
 
-class RiskTypeDefinitionSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDefinitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeDefinition
         fields = ('id', 'name', 'definition')
 
 
-class RiskTypeDefinitionListSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDefinitionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeDefinition
         fields = ('id', 'name')
 
 
-class RiskTypeDefinitionCreateSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDefinitionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeDefinition
         fields = ('name', 'definition')
@@ -26,19 +26,19 @@ class RiskTypeDefinitionCreateSerializer(serializers.HyperlinkedModelSerializer)
         return attrs
 
 
-class RiskTypeDataSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeData
         fields = ('id', 'risk_type_definition', 'data')
 
 
-class RiskTypeDataListSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDataListSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeData
         fields = ('id', 'risk_type_definition')
 
 
-class RiskTypeDataCreateSerializer(serializers.HyperlinkedModelSerializer):
+class RiskTypeDataCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskTypeData
         fields = ('risk_type_definition', 'data')
