@@ -1,16 +1,21 @@
 from rest_framework import viewsets, status
 
-from api.serializers import RiskTypeDataSerializer, RiskTypeDefinitionListSerializer, RiskTypeDefinitionDetailSerializer
 from api.models import RiskTypeDefinition, RiskTypeData
+from api.serializers import (RiskTypeDefinitionSerializer, RiskTypeDefinitionListSerializer,
+                             RiskTypeDefinitionCreateSerializer, RiskTypeDataSerializer, RiskTypeDataListSerializer, RiskTypeDataCreateSerializer)
 
 
 class RiskTypeDefinitionViewSet(viewsets.ModelViewSet):
     queryset = RiskTypeDefinition.objects.all()
-    serializer_class = RiskTypeDefinitionListSerializer
+    serializer_class = RiskTypeDefinitionSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        self.serializer_class = RiskTypeDefinitionDetailSerializer
-        return super(RiskTypeDefinitionViewSet, self).retrieve(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        self.serializer_class = RiskTypeDefinitionListSerializer
+        return super(RiskTypeDefinitionViewSet, self).list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self.serializer_class = RiskTypeDefinitionCreateSerializer
+        return super(RiskTypeDefinitionViewSet, self).create(request, *args, **kwargs)
 
     def destroy(self, request, pk=None):
         response = {'message': 'Delete function is not offered in this path.'}
@@ -28,6 +33,14 @@ class RiskTypeDefinitionViewSet(viewsets.ModelViewSet):
 class RiskTypeDataViewSet(viewsets.ModelViewSet):
     queryset = RiskTypeData.objects.all()
     serializer_class = RiskTypeDataSerializer
+
+    def list(self, request, *args, **kwargs):
+        self.serializer_class = RiskTypeDataListSerializer
+        return super(RiskTypeDataViewSet, self).list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self.serializer_class = RiskTypeDataCreateSerializer
+        return super(RiskTypeDataViewSet, self).create(request, *args, **kwargs)
 
     def destroy(self, request, pk=None):
         response = {'message': 'Delete function is not offered in this path.'}
