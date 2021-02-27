@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
-from jsonschema import validate
+from jsonschema import validate, Draft4Validator, SchemaError
+from django.core.exceptions import ValidationError
 
 
 class BaseModel(models.Model):
@@ -29,6 +30,14 @@ class RiskTypeDefinition(BaseModel):
 
     def __str__(self):
         return self.name
+    
+    def clean(self):
+        try:
+            Draft4Validator.check_schema(self.definition)
+        except SchemaError as SE:
+            raise ValidationError(SE)
+
+        
 
 
 class RiskTypeData(BaseModel):
