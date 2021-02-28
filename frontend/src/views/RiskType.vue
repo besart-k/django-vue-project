@@ -1,7 +1,12 @@
 <template>
   <div class="form-container">
     <h3>Risk Type Name : {{ riskTypeName }}</h3>
-    <FormSchema :schema="schema" v-model="model" ref="formSchema">
+    <FormSchema
+      :schema="schema"
+      v-model="model"
+      ref="formSchema"
+      @submit="submitRiskTypeData"
+    >
       <button type="submit">Subscribe</button>
     </FormSchema>
   </div>
@@ -10,6 +15,7 @@
 <script>
 import FormSchema from "@formschema/native";
 import axios from "axios";
+import {StatusCodes} from 'http-status-codes';
 
 export default {
   name: "RiskType",
@@ -17,7 +23,6 @@ export default {
     schema: {},
     model: {},
     riskTypeName: "",
-    endpoint: "http://localhost:8000/risk-type-definitions/",
   }),
   created() {
     var riskTypeId = this.$route.params.id;
@@ -27,7 +32,7 @@ export default {
   methods: {
     setRiskType(id) {
       axios
-        .get(`${this.endpoint}${id}`)
+        .get(`http://localhost:8000/risk-type-definitions/${id}`)
         .then((response) => {
           const { name, definition } = response.data;
           this.$refs.formSchema.load(definition);
@@ -36,6 +41,21 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    submitRiskTypeData(ev) {
+      ev.preventDefault();
+      var riskTypeId = this.$route.params.id;
+      axios.post("http://localhost:8000/risk-type-data/", {
+        risk_type_definition: riskTypeId,
+        data: this.model,
+      }).then(response=>{
+        if(response.status==StatusCodes.CREATED){
+          alert('The data was submited!');
+          this.$refs.formSchema.reset();
+        }else{
+          alert('Something went wrong!')
+        }
+      })
     },
   },
   components: {
