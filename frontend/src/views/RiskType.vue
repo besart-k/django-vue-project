@@ -65,7 +65,7 @@
     },
   };
 </script>
-<style scoped>
+<style>
   .form-container {
     max-width: 700px;
     margin: auto;
