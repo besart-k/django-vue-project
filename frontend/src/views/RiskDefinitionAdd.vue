@@ -2,6 +2,14 @@
     <div>
         <h3>Generate Custom Forms</h3>
         <div class="add-field-container container">
+            <div class="risk-form-container">
+                <input id="risk-type-name-id" v-model="risk_type_name"
+                    placeholder="Risk Type Ex: Price, Vehicle..." /><button @click="getSchema">Print
+                    schmea</button><button @click="submitRiskType">Submit Schema</button>
+            </div>
+            <div>
+                <b-table striped hover :items="getPropertiesTable()"></b-table>
+            </div>
             <b-tabs content-class="mt-3">
                 <b-tab title="Add Text Field" active>
                     <div class="field-form-container">
@@ -39,6 +47,10 @@
                         <div class="field-attr">
                             <label>Maximum</label>
                             <input type="number" v-model="generalFormData.maximum" />
+                        </div>
+                        <div class="field-attr">
+                            <label>Integer</label>
+                            <input type="checkbox" v-model="generalFormData.integer" />
                         </div>
                         <div class="field-attr">
                             <label>Required</label>
@@ -102,14 +114,16 @@
                     </div>
                 </b-tab>
             </b-tabs>
-            <div>
-                <b-table striped hover :items="getPropertiesTable()"></b-table>
-            </div>
+
         </div>
     </div>
 </template>
 
 <script>
+    import axios from "axios";
+    import {
+        StatusCodes
+    } from "http-status-codes";
     export default {
         name: "RiskDefinitionAdd",
         data: () => ({
@@ -117,14 +131,16 @@
             properties: {},
             generalFormData: {
                 name: "",
-                minLength: null,
-                maxLength: null,
-                minimum: null,
-                maximum: null,
+                minLength: undefined,
+                maxLength: undefined,
+                minimum: undefined,
+                maximum: undefined,
+                integer: false,
                 enum: [],
                 enumInputOptionValue: '',
                 required: true,
             },
+            risk_type_name: ''
         }),
         methods: {
             addField(type) {
@@ -149,27 +165,35 @@
                     this.properties[name] = {
                         type: "string",
                         title: name,
-                        minLength: minLength,
-                        maxLength: maxLength
+                        minLength: parseInt(minLength),
+                        maxLength: parseInt(maxLength),
                     }
                 }
                 if (type == 'number') {
                     this.properties[name] = {
                         type: "number",
-                        minimum: minimum,
-                        maximum: maximum,
+                        title: name,
+                        minimum: parseInt(minimum),
+                        maximum: parseInt(maximum),
+                    }
+                    if (!this.properties.integer) {
+                        this.properties[name].attrs = {
+                            "step": "any"
+                        }
                     }
 
                 }
                 if (type == 'date') {
                     this.properties[name] = {
                         type: "string",
-                        title: "name",
+                        title: name,
                         format: "date",
-                        minimum: minimum,
-                        maximum: maximum,
+                        "formatMinimum": parseInt(minimum),
+                        "formatMaximum": parseInt(maximum),
                         "attrs": {
-                            "type": "date"
+                            "type": "date",
+                            "min": parseInt(minimum),
+                            "max": parseInt(maximum)
                         }
                     }
 
@@ -178,7 +202,7 @@
                     this.properties[name] = {
                         type: "string",
                         title: "name",
-                        enum: this.generalFormData.enum,
+                        enum: this.generalFormData.enum
                     }
                 }
                 if (required && !this.required.includes(name)) {
@@ -190,10 +214,11 @@
             resetGeneralForm() {
                 this.generalFormData = Object.assign({}, {
                     name: "",
-                    minLength: 0,
-                    maxLength: 100,
-                    minimum: 0,
-                    maximum: 1000,
+                    minLength: undefined,
+                    maxLength: undefined,
+                    minimum: undefined,
+                    maximum: undefined,
+                    integer: false,
                     enum: [],
                     enumInputOptionValue: '',
                     required: true,
@@ -216,10 +241,12 @@
                     var field_is_required = this.required.includes(key);
                     items.push({
                         name: key,
+                        type: value.type,
                         minLength: value.minLength,
                         maxLength: value.maxLength,
                         minimum: value.minimum,
                         maximum: value.maximum,
+                        integer: value.integer,
                         enum: value.enum,
                         required: field_is_required,
 
@@ -227,6 +254,43 @@
                 }
                 return items;
             },
+            removeEmpty(obj) {
+                const newObj = {};
+                Object.entries(obj).forEach(([k, v]) => {
+                    if (v === Object(v)) {
+                        newObj[k] = this.removeEmpty(v);
+                    } else if (v != null) {
+                        newObj[k] = obj[k];
+                    }
+                });
+                return newObj;
+            },
+            getSchema() {
+                var schema = {
+                    "title": this.risk_type_name,
+                    "type": "object",
+                }
+                schema.properties = this.properties;
+                schema.required = this.required;
+                // schema = this.removeEmpt/y(schema);
+                console.log(schema)
+                return schema
+            },
+            submitRiskType() {
+                axios
+                    .post("http://localhost:8000/risk-type-definitions/", {
+                        name: this.risk_type_name,
+                        definition: this.getSchema(),
+                    })
+                    .then((response) => {
+                        if (response.status == StatusCodes.CREATED) {
+                            alert("The data was submited!");
+                        } else {
+                            alert("Something went wrong!");
+                        }
+                    });
+            }
+
         }
     };
 </script>
@@ -271,5 +335,17 @@
         padding: 2px 5px;
 
         font-size: 15px;
+    }
+
+    .risk-form-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 20px;
+        align-content: flex-end;
+    }
+
+    #risk-type-name-id {
+        width: 50%;
     }
 </style>
