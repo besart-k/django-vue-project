@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>The list of Risk Types</h1>
+    <h3>Choose a risk type to create new risk</h3>
     <div class="list-group list-group-flush container">
       <router-link class="list-group-item list-group-item-action bg-light" v-for="type in riskTypes"
         v-bind:key="type.id" :to="{ name: 'RiskType', params: { id: type.id } }">{{ type.name }}</router-link>
@@ -40,7 +40,7 @@
 
 <style scoped>
   .list-group-flush {
-    width: 30%;
+    width: 50%;
     align-self: center;
   }
 </style>

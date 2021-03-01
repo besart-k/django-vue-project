@@ -1,8 +1,8 @@
 <template>
   <div class="form-container">
-    <h3>Risk Type Name : {{ riskTypeName }}</h3>
+    <h3>Risk Type: {{ riskTypeName }}</h3>
     <FormSchema :schema="schema" v-model="model" ref="formSchema" @submit="submitRiskTypeData">
-      <button type="submit">Subscribe</button>
+      <button type="submit">Add {{riskTypeName}}</button>
     </FormSchema>
   </div>
 </template>
@@ -89,10 +89,12 @@
   input[type="datetime"],
   input[type="password"],
   input[type="url"],
+  input[type="number"],
+  input[type="date"],
   select,
   textarea {
     border: none;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 30%);
     background: #fff;
     width: 100%;
     padding: 0.375rem 0.75rem;
@@ -122,22 +124,18 @@
   }
 
   div[data-fs-field] {
-    width: 300px;
+    width: 50%;
+    min-width: 200px;
     padding: 10px;
-
-    align-items: left;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
     margin-bottom: 10px;
   }
 
   div[data-fs-field-input] {
     width: 100%;
-    justify-content: flex-start;
-    display: flex;
-    flex-direction: column;
   }
 
   input[type="checkbox"] {

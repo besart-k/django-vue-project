@@ -1,11 +1,10 @@
 <template>
     <div>
-        <h3>Generate Custom Forms</h3>
+        <h3>Add risk type definition</h3>
         <div class="add-field-container container">
             <div class="risk-form-container">
-                <input id="risk-type-name-id" v-model="risk_type_name"
-                    placeholder="Risk Type Ex: Price, Vehicle..." /><button @click="getSchema">Print
-                    schmea</button><button @click="submitRiskType">Submit Schema</button>
+                <input id="risk-type-name-id" v-model="riskTypeName" placeholder="Risk Type Ex: Price, Vehicle..." />
+                <button @click="submitRiskType">Submit Definition</button>
             </div>
             <div>
                 <b-table striped hover :items="getPropertiesTable()"></b-table>
@@ -140,7 +139,7 @@
                 enumInputOptionValue: '',
                 required: true,
             },
-            risk_type_name: ''
+            riskTypeName: ''
         }),
         methods: {
             addField(type) {
@@ -240,7 +239,7 @@
             getPropertiesTable() {
                 var items = [];
                 for (const [key, value] of Object.entries(this.properties)) {
-                    var field_is_required = this.required.includes(key);
+                    var fieldIsRequired = this.required.includes(key);
                     items.push({
                         name: key,
                         type: value.type,
@@ -250,7 +249,7 @@
                         maximum: value.maximum,
                         integer: value.integer,
                         enum: value.enum,
-                        required: field_is_required,
+                        required: fieldIsRequired,
 
                     }, );
                 }
@@ -258,7 +257,7 @@
             },
             getSchema() {
                 var schema = {
-                    "title": this.risk_type_name,
+                    "title": this.riskTypeName,
                     "type": "object",
                 }
                 schema.properties = this.properties;
@@ -266,9 +265,15 @@
                 return schema
             },
             submitRiskType() {
+                if (!this.riskTypeName) {
+                    alert('Add risk type name before submiting the definition!')
+                }
+                if (!this.properties) {
+                    alert('Add at least one risk type field before submiting the definition!')
+                }
                 axios
                     .post("http://localhost:8000/risk-type-definitions/", {
-                        name: this.risk_type_name,
+                        name: this.riskTypeName,
                         definition: this.getSchema(),
                     })
                     .then((response) => {
@@ -276,6 +281,7 @@
                             alert("The data was submited!");
                         } else {
                             alert(response.statusText);
+
                         }
                     });
             },
