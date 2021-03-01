@@ -165,21 +165,23 @@
                     this.properties[name] = {
                         type: "string",
                         title: name,
-                        minLength: parseInt(minLength),
-                        maxLength: parseInt(maxLength),
+                        minLength: this.toIntOrUndefined(minLength),
+                        maxLength: this.toIntOrUndefined(maxLength),
                     }
                 }
                 if (type == 'number') {
                     this.properties[name] = {
-                        type: "number",
+                        type: "integer",
                         title: name,
-                        minimum: parseInt(minimum),
-                        maximum: parseInt(maximum),
+                        minimum: this.toIntOrUndefined(minimum),
+                        maximum: this.toIntOrUndefined(maximum),
+                        attrs: {
+                            "min": this.toIntOrUndefined(minimum),
+                            "max": this.toIntOrUndefined(maximum),
+                        }
                     }
                     if (!this.properties.integer) {
-                        this.properties[name].attrs = {
-                            "step": "any"
-                        }
+                        this.properties[name].attrs.step = "any";
                     }
 
                 }
@@ -188,12 +190,12 @@
                         type: "string",
                         title: name,
                         format: "date",
-                        "formatMinimum": parseInt(minimum),
-                        "formatMaximum": parseInt(maximum),
+                        "formatMinimum": minimum,
+                        "formatMaximum": maximum,
                         "attrs": {
                             "type": "date",
-                            "min": parseInt(minimum),
-                            "max": parseInt(maximum)
+                            "min": minimum,
+                            "max": maximum
                         }
                     }
 
@@ -254,17 +256,6 @@
                 }
                 return items;
             },
-            removeEmpty(obj) {
-                const newObj = {};
-                Object.entries(obj).forEach(([k, v]) => {
-                    if (v === Object(v)) {
-                        newObj[k] = this.removeEmpty(v);
-                    } else if (v != null) {
-                        newObj[k] = obj[k];
-                    }
-                });
-                return newObj;
-            },
             getSchema() {
                 var schema = {
                     "title": this.risk_type_name,
@@ -272,8 +263,6 @@
                 }
                 schema.properties = this.properties;
                 schema.required = this.required;
-                // schema = this.removeEmpt/y(schema);
-                console.log(schema)
                 return schema
             },
             submitRiskType() {
@@ -286,9 +275,15 @@
                         if (response.status == StatusCodes.CREATED) {
                             alert("The data was submited!");
                         } else {
-                            alert("Something went wrong!");
+                            alert(response.statusText);
                         }
                     });
+            },
+            toIntOrUndefined(str) {
+                if (!isNaN(parseInt(str))) {
+                    return parseInt(str)
+                }
+                return undefined
             }
 
         }
