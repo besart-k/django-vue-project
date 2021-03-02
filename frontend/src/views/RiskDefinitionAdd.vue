@@ -257,7 +257,6 @@
             },
             getSchema() {
                 var schema = {
-                    "title": this.riskTypeName,
                     "type": "object",
                 }
                 schema.properties = this.properties;
@@ -269,7 +268,7 @@
                     alert('Add risk type name before submiting the definition!')
                 }
                 if (!this.properties) {
-                    alert('Add at least one risk type field before submiting the definition!')
+                    alert('Add at least one risk type field before submiting!')
                 }
                 axios
                     .post("http://localhost:8000/risk-type-definitions/", {
