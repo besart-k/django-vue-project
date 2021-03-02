@@ -6,111 +6,23 @@
                 <input id="risk-type-name-id" v-model="riskTypeName" placeholder="Risk Type Ex: Price, Vehicle..." />
                 <button @click="submitRiskType">Submit Definition</button>
             </div>
-            <div>
-                <b-table striped hover :items="getPropertiesTable()"></b-table>
-            </div>
+            <fields-table :properties="properties" :required="fieldsRequired"></fields-table>
+
             <b-tabs content-class="mt-3">
+
                 <b-tab title="Add Text Field" active>
-                    <div class="field-form-container">
-                        <div class="field-attr">
-                            <label>Field Name</label>
-                            <input type="text" v-model="generalFormData.name" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Min length</label>
-                            <input type="number" v-model="generalFormData.minLength" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Max Length</label>
-                            <input type="number" v-model="generalFormData.maxLength" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Required</label>
-                            <input type="checkbox" v-model="generalFormData.required" />
-                        </div>
-                        <div class="field-attr">
-                            <button @click="addField('text')">Add</button>
-                        </div>
-                    </div>
+                    <add-text-field-form @addField="addField"></add-text-field-form>
                 </b-tab>
                 <b-tab title="Add Number Field">
-                    <div class="field-form-container">
-                        <div class="field-attr">
-                            <label>Field Name</label>
-                            <input type="text" v-model="generalFormData.name" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Minimum</label>
-                            <input type="number" v-model="generalFormData.minimum" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Maximum</label>
-                            <input type="number" v-model="generalFormData.maximum" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Integer</label>
-                            <input type="checkbox" v-model="generalFormData.integer" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Required</label>
-                            <input type="checkbox" v-model="generalFormData.required" />
-                        </div>
-                        <div class="field-attr">
-                            <button @click="addField('number')">Add</button>
-                        </div>
-                    </div>
+                    <add-number-field-form @addField="addField"></add-number-field-form>
                 </b-tab>
+
                 <b-tab title="Add Date Field">
-                    <div class="field-form-container">
-                        <div class="field-attr">
-                            <label>Field Name</label>
-                            <input type="text" v-model="generalFormData.name" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Minimum</label>
-                            <input type="date" v-model="generalFormData.minimum" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Maximum</label>
-                            <input type="date" v-model="generalFormData.maximum" />
-                        </div>
-                        <div class="field-attr">
-                            <label>Required</label>
-                            <input type="checkbox" v-model="generalFormData.required" />
-                        </div>
-                        <button @click="addField('date')">Add</button>
-                    </div>
+                    <add-date-field-form @addField="addField"></add-date-field-form>
                 </b-tab>
                 <b-tab title="Add Enum">
-                    <div class="field-form-container">
-                        <div class="field-attr">
-                            <label>Field Name</label>
-                            <input type="text" v-model="generalFormData.name" />
-                        </div>
+                    <add-enum-field-form @addField="addField"></add-enum-field-form>
 
-                        <div class="field-attr">
-                            <label>Options</label>
-                            <select>
-                                <option v-for="[ind, item] in generalFormData.enum.entries()" v-bind:key="ind">
-                                    {{ item }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="field-attr">
-                            <label>Add options to enum</label>
-                            <p>
-                                <input v-model="generalFormData.enumInputOptionValue" />
-                                <button @click="addEnumOption" id="add-option-button">
-                                    Add option
-                                </button>
-                            </p>
-                        </div>
-                        <div class="field-attr">
-                            <label>Required</label>
-                            <input type="checkbox" v-model="generalFormData.required" />
-                        </div>
-                        <button @click="addField('enum')">Add</button>
-                    </div>
                 </b-tab>
             </b-tabs>
 
@@ -119,148 +31,54 @@
 </template>
 
 <script>
+    import FieldsTable from '../components/FieldsTable.vue'
+    import AddNumberFieldForm from '../components/AddNumberFieldForm.vue'
+    import AddTextFieldForm from '../components/AddTextFieldForm.vue'
+    import AddDateFieldFormVue from '../components/AddDateFieldForm.vue';
+    import AddEnumFieldFormVue from '../components/AddEnumFieldForm.vue';
     import axios from "axios";
     import {
         StatusCodes
     } from "http-status-codes";
+
     export default {
         name: "RiskDefinitionAdd",
+        components: {
+            'fields-table': FieldsTable,
+            'add-number-field-form': AddNumberFieldForm,
+            'add-text-field-form': AddTextFieldForm,
+            'add-date-field-form': AddDateFieldFormVue,
+            'add-enum-field-form': AddEnumFieldFormVue
+        },
         data: () => ({
-            required: [],
+            fieldsRequired: [],
             properties: {},
-            generalFormData: {
-                name: "",
-                minLength: undefined,
-                maxLength: undefined,
-                minimum: undefined,
-                maximum: undefined,
-                integer: false,
-                enum: [],
-                enumInputOptionValue: '',
-                required: true,
-            },
             riskTypeName: ''
         }),
+
         methods: {
-            addField(type) {
+            addField(obj) {
+                console.log(obj)
                 const {
-                    name,
-                    minLength,
-                    maxLength,
-                    minimum,
-                    maximum,
+                    key,
+                    property,
                     required
-                } = this.generalFormData
-                if (!name) {
-                    alert('Name cannot be empty!')
-                    return
+                } = obj
+                if (this.properties.key) {
+                    alert(`Field with name ${key} already exist!`)
                 }
-                if (this.properties[name]) {
-                    alert(`Field with name ${name} already exist!`)
-                    return
+                this.$set(this.properties, key, property);
+                if (required && !this.fieldsRequired.includes(key)) {
+                    this.fieldsRequired.push(key)
                 }
-
-                if (type == 'text') {
-                    this.properties[name] = {
-                        type: "string",
-                        title: name,
-                        minLength: this.toIntOrUndefined(minLength),
-                        maxLength: this.toIntOrUndefined(maxLength),
-                    }
-                }
-                if (type == 'number') {
-                    this.properties[name] = {
-                        type: "integer",
-                        title: name,
-                        minimum: this.toIntOrUndefined(minimum),
-                        maximum: this.toIntOrUndefined(maximum),
-                        attrs: {
-                            "min": this.toIntOrUndefined(minimum),
-                            "max": this.toIntOrUndefined(maximum),
-                        }
-                    }
-                    if (!this.properties.integer) {
-                        this.properties[name].attrs.step = "any";
-                    }
-
-                }
-                if (type == 'date') {
-                    this.properties[name] = {
-                        type: "string",
-                        title: name,
-                        format: "date",
-                        "formatMinimum": minimum,
-                        "formatMaximum": maximum,
-                        "attrs": {
-                            "type": "date",
-                            "min": minimum,
-                            "max": maximum
-                        }
-                    }
-
-                }
-                if (type == 'enum') {
-                    this.properties[name] = {
-                        type: "string",
-                        title: "name",
-                        enum: this.generalFormData.enum
-                    }
-                }
-                if (required && !this.required.includes(name)) {
-                    this.required.push(name);
-                }
-                this.resetGeneralForm()
-
-            },
-            resetGeneralForm() {
-                this.generalFormData = Object.assign({}, {
-                    name: "",
-                    minLength: undefined,
-                    maxLength: undefined,
-                    minimum: undefined,
-                    maximum: undefined,
-                    integer: false,
-                    enum: [],
-                    enumInputOptionValue: '',
-                    required: true,
-
-                })
-            },
-            addEnumOption() {
-                const {
-                    enumInputOptionValue
-                } = this.generalFormData
-                if (this.generalFormData.enum.includes(enumInputOptionValue)) {
-                    alert('This option already exist!')
-                    return
-                }
-                this.generalFormData.enum.push(enumInputOptionValue);
-            },
-            getPropertiesTable() {
-                var items = [];
-                for (const [key, value] of Object.entries(this.properties)) {
-                    var fieldIsRequired = this.required.includes(key);
-                    items.push({
-                        name: key,
-                        type: value.type,
-                        minLength: value.minLength,
-                        maxLength: value.maxLength,
-                        minimum: value.minimum,
-                        maximum: value.maximum,
-                        integer: value.integer,
-                        enum: value.enum,
-                        required: fieldIsRequired,
-
-                    }, );
-                }
-                return items;
+                console.log(this.fieldsRequired, required)
             },
             getSchema() {
                 var schema = {
                     "type": "object",
                 }
                 schema.properties = this.properties;
-                schema.required = this.required;
+                schema.fieldsRequired = this.fieldsRequired;
                 return schema
             },
             submitRiskType() {
@@ -283,18 +101,12 @@
 
                         }
                     });
-            },
-            toIntOrUndefined(str) {
-                if (!isNaN(parseInt(str))) {
-                    return parseInt(str)
-                }
-                return undefined
             }
 
         }
     };
 </script>
-<style scoped>
+<style>
     .add-field-container {
         width: 100%;
         align-self: center;
