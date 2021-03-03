@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { toIntOrUndefined } from "../services/utils";
 export default {
   name: "AddNumberFieldForm",
   props: [],
@@ -39,28 +40,30 @@ export default {
   }),
   methods: {
     addField() {
+      if (!this.name) {
+        alert("Name cannot be empty!");
+        return;
+      }
+      if (!isNaN(this.minimum) && !isNaN(this.maximum) && this.minimum > this.maximum) {
+        alert("Minimum cannot be greater than maximum.");
+        return;
+      }
       this.$emit("addField", {
         key: this.name,
         property: {
           type: this.integer ? "integer" : "number",
           title: this.name,
-          minimum: this.toIntOrUndefined(this.minimum),
-          maximum: this.toIntOrUndefined(this.maximum),
+          minimum: toIntOrUndefined(this.minimum),
+          maximum: toIntOrUndefined(this.maximum),
           attrs: {
-            min: this.toIntOrUndefined(this.minimum),
-            max: this.toIntOrUndefined(this.maximum),
+            min: toIntOrUndefined(this.minimum),
+            max: toIntOrUndefined(this.maximum),
             step: this.integer ? undefined : "any",
-            class:'generated-input gn-input'
+            class: "generated-input gn-input",
           },
         },
         required: this.required,
       });
-    },
-    toIntOrUndefined(str) {
-      if (!isNaN(parseInt(str))) {
-        return parseInt(str);
-      }
-      return undefined;
     },
   },
 };

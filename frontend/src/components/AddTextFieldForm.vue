@@ -6,7 +6,7 @@
     </div>
     <div class="field-attr">
       <label>Min length</label>
-      <input type="number" v-model="minLength" />
+      <input type="number" min="0" v-model="minLength" />
     </div>
     <div class="field-attr">
       <label>Max Length</label>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { toIntOrUndefined } from "../services/utils";
 export default {
   name: "AddTextFieldForm",
   props: [],
@@ -34,13 +35,21 @@ export default {
   }),
   methods: {
     addField() {
+      if (this.minLength && this.maxLength && this.minLength > this.maxLength) {
+        alert("Minimum cannot be greater than maximum!");
+        return;
+      }
+      if (!this.name) {
+        alert("Name field cannot be empty!");
+        return;
+      }
       this.$emit("addField", {
         key: this.name,
         property: {
           type: "string",
           title: this.name,
-          minLength: this.toIntOrUndefined(this.minLength),
-          maxLength: this.toIntOrUndefined(this.maxLength),
+          minLength: toIntOrUndefined(this.minLength),
+          maxLength: toIntOrUndefined(this.maxLength),
           attrs: {
             class: "generated-input gt-input",
             placeholder: this.name,
@@ -48,12 +57,6 @@ export default {
         },
         required: this.required,
       });
-    },
-    toIntOrUndefined(str) {
-      if (!isNaN(parseInt(str))) {
-        return parseInt(str);
-      }
-      return undefined;
     },
   },
 };

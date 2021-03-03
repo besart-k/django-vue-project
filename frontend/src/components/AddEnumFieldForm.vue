@@ -14,7 +14,7 @@
       </select>
     </div>
     <div class="field-attr">
-      <label>Add options to enumOptions</label>
+      <label>Add option</label>
       <p>
         <input v-model="enumOptionsInputOptionValue" />
         <button @click="addenumOptionsOption" id="add-option-button">
