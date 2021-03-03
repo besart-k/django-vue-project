@@ -6,7 +6,7 @@
       <router-link to="/risk-types">Risk Types</router-link> |
       <router-link to="/risk-type-add">Add Risk Type Definition</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
