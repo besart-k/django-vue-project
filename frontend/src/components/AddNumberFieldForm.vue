@@ -50,6 +50,7 @@ export default {
             min: this.toIntOrUndefined(this.minimum),
             max: this.toIntOrUndefined(this.maximum),
             step: this.integer ? undefined : "any",
+            class:'generated-input gn-input'
           },
         },
         required: this.required,

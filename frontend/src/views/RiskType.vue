@@ -77,16 +77,7 @@ label {
   font-family: "Roboto", sans-serif;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="datetime-local"],
-input[type="datetime"],
-input[type="password"],
-input[type="url"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
+.generated-input {
   border: none;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 30%);
   background: #fff;

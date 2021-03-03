@@ -74,7 +74,7 @@ export default {
         type: "object",
       };
       schema.properties = this.properties;
-      schema.fieldsRequired = this.fieldsRequired;
+      schema.required = this.fieldsRequired;
       return schema;
     },
     submitRiskType() {

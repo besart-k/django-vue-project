@@ -48,6 +48,10 @@ export default {
           type: "string",
           title: this.name,
           enum: this.enumOptions,
+          attrs: {
+            placeholder: this.name,
+            class: "generated-input ge-input",
+          },
         },
         required: this.required,
       });

@@ -39,8 +39,12 @@ export default {
         property: {
           type: "string",
           title: this.name,
-          minimum: this.toIntOrUndefined(this.minLength),
-          maximum: this.toIntOrUndefined(this.maxLength),
+          minLength: this.toIntOrUndefined(this.minLength),
+          maxLength: this.toIntOrUndefined(this.maxLength),
+          attrs: {
+            class: "generated-input gt-input",
+            placeholder: this.name,
+          },
         },
         required: this.required,
       });

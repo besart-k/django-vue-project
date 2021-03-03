@@ -44,6 +44,8 @@ export default {
             type: "date",
             min: this.minimum,
             max: this.maximum,
+            class: "generated-input gd-input",
+            placeholder: this.name,
           },
         },
         required: this.required,
