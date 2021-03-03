@@ -61,8 +61,9 @@ export default {
   methods: {
     addField(obj) {
       const { key, property, required } = obj;
-      if (this.properties.key) {
+      if (this.properties[key]) {
         alert(`Field with name ${key} already exist!`);
+        return;
       }
       this.$set(this.properties, key, property);
       if (required && !this.fieldsRequired.includes(key)) {
@@ -80,9 +81,11 @@ export default {
     submitRiskType() {
       if (!this.riskTypeName) {
         alert("Add risk type name before submiting the definition!");
+        return;
       }
       if (!this.properties) {
         alert("Add at least one risk type field before submiting!");
+        return;
       }
       RiskTypeServices.submitRiskTypeDefinition(
         this.riskTypeName,
