@@ -1,5 +1,4 @@
 <template>
-
     <div class="field-form-container">
         <div class="field-attr">
             <label>Field Name</label>

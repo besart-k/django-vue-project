@@ -1,5 +1,4 @@
 <template>
-
     <div class="field-form-container">
         <div class="field-attr">
             <label>Field Name</label>
@@ -39,9 +38,14 @@
                     property: {
                         type: "string",
                         title: this.name,
-                        format:"date",
+                        format: "date",
                         formatMinimum: this.minimum,
-                        formatMaximum: this.maximum
+                        formatMaximum: this.maximum,
+                        attrs: {
+                            type: "date",
+                            min: this.minimum,
+                            max: this.maximum
+                        }
                     },
                     required: this.required
                 })

@@ -36,7 +36,7 @@
     import AddTextFieldForm from '../components/AddTextFieldForm.vue'
     import AddDateFieldFormVue from '../components/AddDateFieldForm.vue';
     import AddEnumFieldFormVue from '../components/AddEnumFieldForm.vue';
-    import axios from "axios";
+    import RiskTypeServices from '../services/RiskTypeServices'
     import {
         StatusCodes
     } from "http-status-codes";
@@ -58,7 +58,6 @@
 
         methods: {
             addField(obj) {
-                console.log(obj)
                 const {
                     key,
                     property,
@@ -71,7 +70,6 @@
                 if (required && !this.fieldsRequired.includes(key)) {
                     this.fieldsRequired.push(key)
                 }
-                console.log(this.fieldsRequired, required)
             },
             getSchema() {
                 var schema = {
@@ -88,11 +86,7 @@
                 if (!this.properties) {
                     alert('Add at least one risk type field before submiting!')
                 }
-                axios
-                    .post("http://localhost:8000/risk-type-definitions/", {
-                        name: this.riskTypeName,
-                        definition: this.getSchema(),
-                    })
+                RiskTypeServices.submitRiskTypeDefinition(this.riskTypeName, this.getSchema())
                     .then((response) => {
                         if (response.status == StatusCodes.CREATED) {
                             alert("The data was submited!");
@@ -106,6 +100,7 @@
         }
     };
 </script>
+
 <style>
     .add-field-container {
         width: 100%;

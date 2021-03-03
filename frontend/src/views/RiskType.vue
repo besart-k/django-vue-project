@@ -9,7 +9,7 @@
 
 <script>
   import FormSchema from "@formschema/native";
-  import axios from "axios";
+  import RiskTypeServices from "../services/RiskTypeServices"
   import {
     StatusCodes
   } from "http-status-codes";
@@ -23,33 +23,25 @@
     }),
     created() {
       var riskTypeId = this.$route.params.id;
-      this.setRiskType(riskTypeId);
+      RiskTypeServices.getRiskType(riskTypeId).then((response) => {
+          const {
+            name,
+            definition
+          } = response.data;
+          this.$refs.formSchema.load(definition);
+          this.riskTypeName = name;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     methods: {
-      setRiskType(id) {
-        axios
-          .get(`http://localhost:8000/risk-type-definitions/${id}`)
-          .then((response) => {
-            const {
-              name,
-              definition
-            } = response.data;
-            this.$refs.formSchema.load(definition);
-            this.riskTypeName = name;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
       submitRiskTypeData(ev) {
         ev.preventDefault();
         var riskTypeId = this.$route.params.id;
-        axios
-          .post("http://localhost:8000/risk-type-data/", {
-            risk_type_definition: riskTypeId,
-            data: this.model,
-          })
+
+        RiskTypeServices.submitRiskTypeDate(riskTypeId, this.model)
           .then((response) => {
             if (response.status == StatusCodes.CREATED) {
               alert("The data was submited!");
