@@ -19,7 +19,7 @@ export default {
           minimum: value.minimum || value.minLength || value.formatMinimum,
           maximum: value.maximum || value.maxLength || value.formatMaximum,
           integer: value.integer,
-          enumOptions: value.enumOptions,
+          enum: value.enum,
           required: fieldIsRequired,
         });
       }
