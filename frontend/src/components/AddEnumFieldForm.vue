@@ -49,7 +49,7 @@ export default {
           title: this.name,
           enum: this.enumOptions,
           attrs: {
-            placeholder: this.name,
+            placeholder: 'Select option',
             class: "generated-input ge-input",
           },
         },

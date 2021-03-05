@@ -42,16 +42,18 @@ export default {
       ev.preventDefault();
       var riskTypeId = this.$route.params.id;
 
-      RiskTypeServices.submitRiskTypeDate(riskTypeId, this.model).then(
-        (response) => {
+      RiskTypeServices.submitRiskTypeDate(riskTypeId, this.model)
+        .then((response) => {
           if (response.status == StatusCodes.CREATED) {
             alert("The data was submited!");
             this.$refs.formSchema.reset();
           } else {
             alert("Something went wrong!");
           }
-        }
-      );
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     },
   },
   components: {

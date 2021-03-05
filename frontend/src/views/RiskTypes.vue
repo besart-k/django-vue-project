@@ -40,8 +40,8 @@ export default {
           this.noData = true;
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        alert(err.message);
       });
   },
 };

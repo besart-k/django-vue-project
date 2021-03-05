@@ -137,7 +137,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://0.0.0.0:8080"
-]
+CORS_ORIGIN_ALLOW_ALL = True

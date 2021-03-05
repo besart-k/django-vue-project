@@ -90,13 +90,17 @@ export default {
       RiskTypeServices.submitRiskTypeDefinition(
         this.riskTypeName,
         this.getSchema()
-      ).then((response) => {
-        if (response.status == StatusCodes.CREATED) {
-          alert("The data was submited!");
-        } else {
-          alert(response.statusText);
-        }
-      });
+      )
+        .then((response) => {
+          if (response.status == StatusCodes.CREATED) {
+            alert("The data was submited!");
+          } else {
+            alert(response.data);
+          }
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     },
   },
 };
