@@ -30,11 +30,10 @@ To deactivate the environment use the command below:
 
 ## Run django from /backend folder
 
-- `python manage.py makemigrations` - first time needed or when new models are added
-- `python manage.py migrate` - first time needed or when new models are added
-- `python manage.py createsuperuser` - admin, ,admin, admin, yes
+- `python manage.py migrate`
+- `python manage.py createsuperuser`
 - `python manage.py runserver` - to run the server
-- `python manage.py test api` - to run test
+- `python manage.py test api` - to run tests
 
 # Frontend Technical details
 
@@ -58,4 +57,4 @@ In main project folder run `docker-compose build` and `docker-compose up` to sta
 
 # Documentation
 
-Read Documentation.pdf in main project folder
+Read Documentation.pdf in main project folder for a simple demo.
