@@ -25,7 +25,7 @@ SECRET_KEY = 'iz#l_^ui2=5av#*(fy_+9=_6ufo=*tq^bd#x_@z1#lx!i)4x%y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,10 +80,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -129,6 +139,5 @@ STATIC_URL = '/static/'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://localhost:8081",
-    "http://localhost:8000"
+    "http://0.0.0.0:8080"
 ]
