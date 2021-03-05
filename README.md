@@ -49,6 +49,13 @@ From /frontend folder run
 
 -  `num run serve`
 
+Also add Vue origin at `CORS_ALLOWED_ORIGINS = []` in `settings.py`
+and Django Rest Api endpoint in env variable `VUE_APP_BASE_RISK_TYPE_API_URL`
+
+# Running with Docker
+
+In main project folder run `docker-compose build` and `docker-compose up` to start Django and Vue apps.
+
 # Documentation
 
 Read Documentation.pdf in main project folder
