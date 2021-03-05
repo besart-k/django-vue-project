@@ -10,18 +10,18 @@ const RiskTypeServices = class {
   }
 
   static getRiskType(id) {
-    return client.get(`http://localhost:8000/risk-type-definitions/${id}`);
+    return client.get(`/risk-type-definitions/${id}`);
   }
 
   static submitRiskTypeDate(id, data) {
-    return client.post("http://localhost:8000/risk-type-data/", {
+    return client.post("/risk-type-data/", {
       risk_type_definition: id,
       data: data,
     });
   }
 
   static submitRiskTypeDefinition(name, definition) {
-    return client.post("http://localhost:8000/risk-type-definitions/", {
+    return client.post("risk-type-definitions/", {
       name: name,
       definition: definition,
     });
